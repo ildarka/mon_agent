@@ -6,6 +6,7 @@
 */
 
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 
 var os = require('os');
@@ -39,8 +40,16 @@ server.expose('getDeviceInfo', function(args, opts, callback) {
 
 server.expose('getSensors', function(args, opts, callback) { 
   var sensors = {};
+  sensors.uptime = os.uptime();
+  
+  
   callback(null, sensors);
 });
 
 server.listen(config.server.port, 'localhost');
 log.info('Monitoring Agent listening on port ' + config.server.port);
+
+var lm_sensors = require('sensors.js'); 
+lm_sensors.sensors(function (data, error) { if (error) throw error; console.log(data); });
+
+
